@@ -1,0 +1,13 @@
+Study for CSA:
+    - String functions + constructor
+For Constructor:
+    - Without static function name, use class like:
+    - If class = PrimeNumber and method = Prime
+    - PrimeNumber p = new PrimerNumber();
+    - boolean b = p.Prime(number);
+    - Inside parenthesis of PrimeNumber needs to contain whatever number
+    - Like this if number is 2:
+    - PrimeNumber p = new PrimeNumber(2);
+    - Constructor goes in PrimeNumber class and is:
+Study for Chem
+    - On 3.9
