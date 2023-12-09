@@ -29,12 +29,13 @@ class ToDoListApp:
         self.load_tasks()
 
         # Bind double-click to remove task
-        self.task_listbox.bind("<Double-Button-1>", lambda event: self.show_task_window())
+        self.task_listbox.bind("<Double-Button-1>", lambda event: self.show_task_window(self.task_listbox.get(tk.ACTIVE)))
 
-        # # Add buttons for each task
-        # for task in self.tasks:
-        #     button = tk.Button(root, text=task, command=lambda t=task: self.show_task_window(t))
-        #     button.grid(row=self.tasks.index(task) + 3, column=0, columnspan=2, pady=5)
+        # Add buttons for each task
+        for task in self.tasks:
+            button = tk.Button(root, text=task, command=lambda t=task: self.show_task_window(t))
+            button.grid(row=self.tasks.index(task) + 3, column=0, columnspan=2, pady=5)
+
 
     def add_task(self):
         task = self.task_entry.get()
@@ -49,7 +50,6 @@ class ToDoListApp:
             button.grid(row=len(self.tasks) + 2, column=0, columnspan=2, pady=5)
 
     def show_task_window(self, task):
-        print("Test task window")
         # Create a new window for the task
         task_window = tk.Toplevel(self.root)
         task_window.title(task)
