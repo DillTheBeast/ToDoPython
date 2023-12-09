@@ -29,12 +29,12 @@ class ToDoListApp:
         self.load_tasks()
 
         # Bind double-click to remove task
-        self.task_listbox.bind("<Double-Button-1>", lambda event: self.remove_task())
+        self.task_listbox.bind("<Double-Button-1>", lambda event: self.show_task_window())
 
-        # Add buttons for each task
-        for task in self.tasks:
-            button = tk.Button(root, text=task, command=lambda t=task: self.show_task_window(t))
-            button.grid(row=self.tasks.index(task) + 3, column=0, columnspan=2, pady=5)
+        # # Add buttons for each task
+        # for task in self.tasks:
+        #     button = tk.Button(root, text=task, command=lambda t=task: self.show_task_window(t))
+        #     button.grid(row=self.tasks.index(task) + 3, column=0, columnspan=2, pady=5)
 
     def add_task(self):
         task = self.task_entry.get()
