@@ -49,6 +49,7 @@ class ToDoListApp:
             button.grid(row=len(self.tasks) + 2, column=0, columnspan=2, pady=5)
 
     def show_task_window(self, task):
+        print("Test task window")
         # Create a new window for the task
         task_window = tk.Toplevel(self.root)
         task_window.title(task)
