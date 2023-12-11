@@ -28,14 +28,13 @@ class ToDoListApp:
         # Load tasks from file
         self.load_main()
 
-        # Bind double-click to remove task
-        self.task_listbox.bind("<Double-Button-1>", lambda event: self.show_side_window(self.task_listbox.get(tk.ACTIVE)))
+        # Bind double-click to show the content of the task
+        self.task_listbox.bind("<Double-Button-1>", self.show_task_content)
 
         # Add buttons for each task
         for task in self.tasks:
             button = tk.Button(root, text=task, command=lambda t=task: self.show_task_window(t))
             button.grid(row=self.tasks.index(task) + 3, column=0, columnspan=2, pady=5)
-
 
     def add_main(self):
         task = self.task_entry.get()
@@ -46,18 +45,51 @@ class ToDoListApp:
             self.task_entry.delete(0, tk.END)
 
             # Add button for the new task
-            button = tk.Button(self.root, text=task, command=lambda t=task: self.show_side_window(t))
+            button = tk.Button(self.root, text=task, command=lambda t=task: self.show_task_window(t))
             button.grid(row=len(self.tasks) + 2, column=0, columnspan=2, pady=5)
 
-    def show_side_window(self, task):
+    def show_task_window(self, task):
         # Create a new window for the task
         task_window = tk.Toplevel(self.root)
         task_window.title(task)
 
-        # Add a label to the new window to display content
-        label = tk.Label(task_window, text=f"This is the window for task: {task}")
-        label.pack(padx=20, pady=20)
+        # Add an Entry widget for content
+        content_entry = tk.Entry(task_window, width=50)
+        content_entry.pack(padx=20, pady=10)
 
+        # Add a "Save" button
+        save_button = tk.Button(task_window, text="Save", command=lambda: self.save_task_content(task, content_entry.get()))
+        save_button.pack(pady=10)
+
+        # Load and display existing content, if any
+        existing_content = self.load_task_content(task)
+        content_entry.insert(tk.END, existing_content)
+        
+    def save_task_content(self, task, content):
+        # Save content to a file
+        with open(f"{task}.txt", "w") as file:
+            file.write(content)
+        messagebox.showinfo("Save Successful", "Content has been saved successfully.")
+
+
+    def show_task_content(self, event):
+        selected_index = self.task_listbox.curselection()
+        if selected_index:
+            task = self.tasks[selected_index[0]]
+            # Create a new window for the task content
+            task_content_window = tk.Toplevel(self.root)
+            task_content_window.title(f"Content of Task: {task}")
+
+            # Load and display content from the file
+            content_label = tk.Label(task_content_window, text=self.load_task_content(task))
+            content_label.pack(padx=20, pady=20)
+
+    def load_task_content(self, task):
+        try:
+            with open(f"{task}.txt", "r") as file:
+                return file.read()
+        except FileNotFoundError:
+            return "No content available."
 
     def remove_main(self):
         selected_index = self.task_listbox.curselection()
@@ -82,24 +114,13 @@ class ToDoListApp:
         with open("todolist.txt", "w") as file:
             for task in self.tasks:
                 file.write(f"{task}\n")
-             
-    def add_side(self):
-        task = self.task_entry.get()
-        if task:
-            self.tasks.append(task)
-            self.task_listbox.insert(tk.END, task)
-            self.save_main()
-            self.task_entry.delete(0, tk.END)
-        
-    def save_side(self, filename):
-        with open(filename, "w") as file:
-            for task in self.tasks:
-                file.write(f"{task}\n")
+
 
 def main():
     root = tk.Tk()
     app = ToDoListApp(root)
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
